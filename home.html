@@ -1,20 +1,25 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduShare - Local Library</title>
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Custom font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; 
+            background-color: #f8fafc; /* Use a slightly richer bg-slate-50 */
         }
         
+        /* Smooth scroll */
         html {
             scroll-behavior: smooth;
         }
 
+        /* Hero text fade-in animation */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -25,14 +30,15 @@
         }
         .fade-in-delay {
             animation: fadeIn 0.8s ease-out 0.2s forwards;
-            opacity: 0; 
+            opacity: 0; /* Start hidden */
         }
         
+        /* Modal fade/scale transition */
         #upload-modal {
             transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
         }
         #upload-modal-panel {
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy scale */
         }
         
         #upload-modal[data-state="closed"] {
@@ -53,6 +59,7 @@
             opacity: 1;
         }
 
+        /* Custom line-clamp for older browser support (Tailwind now includes this) */
         .line-clamp-3 {
             display: -webkit-box;
             -webkit-line-clamp: 3;
@@ -67,6 +74,7 @@
     <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <a href="#" class="flex items-center space-x-2 transition-opacity hover:opacity-80">
+                <!-- SVG Logo -->
                 <svg class="h-8 w-8 text-sky-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25" />
                 </svg>
@@ -75,6 +83,7 @@
             <div class="flex items-center space-x-6">
                 <a href="#" class="text-gray-600 hover:text-sky-600 font-medium transition-colors">Home</a>
                 <button id="open-modal-btn" class="flex items-center space-x-2 bg-sky-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-sky-700 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-0.5">
+                    <!-- Plus Icon -->
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
@@ -92,6 +101,7 @@
             <h1 class="text-5xl font-extrabold text-gray-900 mb-4 fade-in">Free Study Materials</h1>
             <p class="text-xl text-gray-600 max-w-2xl mx-auto fade-in-delay">Your personal library. Explore and download resources saved by you.</p>
 
+            <!-- NEW SEARCH BAR -->
             <div class="mt-8 max-w-xl mx-auto">
                 <div class="relative">
                     <input type="search" id="search-input" placeholder="Search your library (e.g., title, category...)" class="w-full px-5 py-3 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all duration-200 shadow-sm">
@@ -100,12 +110,15 @@
                     </svg>
                 </div>
             </div>
+            <!-- END SEARCH BAR -->
 
         </section>
         
         <!-- Book List -->
         <section id="book-list-container">
+            <!-- This grid will be populated by JS -->
             <div id="book-list" class="space-y-8 max-w-4xl mx-auto">
+                <!-- Book cards will be injected here -->
             </div>
         </section>
 
@@ -115,6 +128,7 @@
     <div id="upload-modal" data-state="closed" class="fixed inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full flex items-center justify-center z-50 p-4">
         <div id="upload-modal-panel" class="relative bg-white w-full max-w-lg mx-auto rounded-xl shadow-2xl">
             <div class="p-6 md:p-8">
+                <!-- Header -->
                 <div class="flex justify-between items-center pb-4 border-b border-gray-200">
                     <h3 class="text-2xl font-semibold text-gray-900">Upload a New Book</h3>
                     <button id="close-modal-btn" class="text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close modal">
@@ -123,6 +137,7 @@
                         </svg>
                     </button>
                 </div>
+                <!-- Form -->
                 <form id="upload-form" class="space-y-5 mt-6">
                     <div>
                         <label for="book-title" class="block text-sm font-medium text-gray-700 mb-1">Book Title</label>
@@ -145,6 +160,7 @@
                         <input type="url" id="book-download-url" placeholder="https://.../book.pdf" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition" required>
                     </div>
                     
+                    <!-- Form Buttons -->
                     <div class="flex justify-end space-x-3 pt-5 border-t border-gray-200 mt-6">
                          <button type="button" id="cancel-upload-btn" class="bg-gray-100 text-gray-800 font-semibold py-2 px-5 rounded-lg hover:bg-gray-200 transition-all">
                             Cancel
@@ -165,6 +181,7 @@
 
     <!-- JavaScript -->
     <script type="module">
+        // --- DOM Elements ---
         const bookList = document.getElementById('book-list');
         const searchInput = document.getElementById('search-input');
         const openModalBtn = document.getElementById('open-modal-btn');
@@ -173,6 +190,7 @@
         const cancelUploadBtn = document.getElementById('cancel-upload-btn');
         const uploadForm = document.getElementById('upload-form');
         
+        // --- Modal Control ---
         function openModal() {
             uploadForm.reset();
             uploadModal.setAttribute('data-state', 'open');
@@ -182,42 +200,50 @@
             uploadModal.setAttribute('data-state', 'closed');
         }
 
+        // --- Event Listeners ---
         openModalBtn.addEventListener('click', openModal);
         closeModalBtn.addEventListener('click', closeModal);
         cancelUploadBtn.addEventListener('click', closeModal);
         
+        // Close modal if backdrop is clicked
         uploadModal.addEventListener('click', (e) => {
             if (e.target === uploadModal) {
                 closeModal();
             }
         });
         
+        // Close modal on 'Escape' key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && uploadModal.getAttribute('data-state') === 'open') {
                 closeModal();
             }
         });
 
+        // --- Search Logic ---
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value;
-            loadBooks(searchTerm); 
+            loadBooks(searchTerm); // Pass the search term to loadBooks
         });
 
+        // Handle form submission
         uploadForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
+            // 1. Get values from form
             const title = document.getElementById('book-title').value;
             const category = document.getElementById('book-category').value;
             const description = document.getElementById('book-description').value;
             let coverUrl = document.getElementById('book-cover-url').value;
             const downloadUrl = document.getElementById('book-download-url').value;
             
+            // 2. Use placeholder if cover URL is empty
             if (!coverUrl) {
                 coverUrl = `https://placehold.co/400x500/e0e7ff/6366f1?text=${encodeURIComponent(title)}`;
             }
             
+            // 3. Create book object
             const newBook = {
-                id: Date.now().toString(), 
+                id: Date.now().toString(), // Simple unique ID
                 title,
                 category,
                 description,
@@ -225,34 +251,49 @@
                 downloadUrl
             };
             
+            // 4. Save book and re-render list
             saveBook(newBook);
+            // Load books, respecting the current search term
             loadBooks(searchInput.value); 
             
+            // 5. Close modal
             closeModal();
         });
         
-        
+        // --- Local Storage Functions ---
+
+        /**
+         * Loads all books from localStorage and renders them to the page
+         * @param {string} [searchTerm] - Optional search term to filter books
+         */
         function loadBooks(searchTerm = '') {
+            // 1. Get books. Newest are already at the front thanks to unshift().
+            // REMOVED .reverse() to fix "newest on top" logic.
             const allBooks = getBooks(); 
             const normalizedSearch = searchTerm.toLowerCase().trim();
 
+            // 2. Filter books if a search term is provided
             const books = normalizedSearch
                 ? allBooks.filter(book => 
                     book.title.toLowerCase().includes(normalizedSearch) ||
                     book.category.toLowerCase().includes(normalizedSearch) ||
                     book.description.toLowerCase().includes(normalizedSearch)
                   )
-                : allBooks; 
+                : allBooks; // Otherwise, show all books
             
+            // 3. Handle empty states
             if (allBooks.length === 0) {
+                // State 1: Library is completely empty
                 bookList.innerHTML = `
                     <div class="bg-white rounded-xl shadow-lg p-12 text-center border border-gray-200">
+                        <!-- Archive Box Icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto text-gray-400 mb-4">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                         </svg>
                         <h3 class="text-2xl font-semibold text-gray-800 mb-2">Your Library is Empty</h3>
                         <p class="text-gray-500 mb-6">Click "Upload Book" to add your first study material.</p>
                         <button id="empty-state-upload-btn" class="flex items-center space-x-2 bg-sky-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-sky-700 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 mx-auto">
+                            <!-- Plus Icon -->
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
@@ -260,13 +301,16 @@
                         </button>
                     </div>
                 `;
+                // Add event listener to the new button
                 document.getElementById('empty-state-upload-btn').addEventListener('click', openModal);
                 return;
             }
 
             if (books.length === 0 && normalizedSearch) {
+                // State 2: Library has items, but no search results
                 bookList.innerHTML = `
                     <div class="bg-white rounded-xl shadow-lg p-12 text-center border border-gray-200">
+                        <!-- Magnifying Glass Icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto text-gray-400 mb-4">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                         </svg>
@@ -277,20 +321,33 @@
                 return;
             }
             
+            // 4. Render all found book cards
             bookList.innerHTML = books.map(book => createBookCardHTML(book)).join('');
         }
 
+        /**
+         * Retrieves all books from localStorage
+         * @returns {Array} An array of book objects
+         */
         function getBooks() {
             return JSON.parse(localStorage.getItem('books') || '[]');
         }
 
+        /**
+         * Adds a new book to localStorage
+         * @param {Object} bookToSave The book object to save
+         */
         function saveBook(bookToSave) {
             const books = getBooks();
-            books.unshift(bookToSave); 
+            books.unshift(bookToSave); // Add to the BEGINNING (unshift) instead of push
             localStorage.setItem('books', JSON.stringify(books));
         }
         
+        /**
+         * Creates HTML string for a single book card
+         */
         function createBookCardHTML(book) {
+            // New HORIZONTAL card design for a "stack" layout
             return `
                 <article class="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl flex flex-col md:flex-row">
                     <img class="h-80 w-full md:w-56 object-cover" 
@@ -299,12 +356,14 @@
                          onerror="this.onerror=null;this.src='https://placehold.co/224x320/e0e7ff/6366f1?text=Image+Error';">
                     
                     <div class="p-6 flex flex-col flex-1">
+                        <!-- This div grows to push the button to the bottom -->
                         <div class="flex-1">
                             <div class="uppercase tracking-wide text-sm text-sky-600 font-semibold">${book.category}</div>
                             <h3 class="block mt-2 text-2xl leading-tight font-bold text-black">${book.title}</h3>
                             <p class="mt-4 text-gray-600 line-clamp-3">${book.description}</p>
                         </div>
                         
+                        <!-- This button will now be aligned to the bottom of the card -->
                         <a href="${book.downloadUrl}" 
                            target="_blank" 
                            rel="noopener noreferrer"
@@ -314,8 +373,11 @@
                     </div>
                 </article>
             `;
+            // --- END OF FIX ---
         }
 
+        // --- Initial Load ---
+        // Load books when the page first loads
         document.addEventListener('DOMContentLoaded', () => loadBooks());
 
     </script>
